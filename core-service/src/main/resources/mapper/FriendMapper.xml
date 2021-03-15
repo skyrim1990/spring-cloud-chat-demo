@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tao.coreservice.repository.FriendRepository">
+
+  <select id="findUserByPhonenumber" resultType="user">
+    select id, username, phonenumber, gender, active, age,
+    friends, avatar, groups, chats,
+    created_at as createdAt, updated_at as updatedAt
+    from t_user
+    where phonenumber like concat('%', #{phonenumber},'%')
+  </select>
+
+  <select id="findUserByUsername" resultType="user">
+    select id, username, phonenumber, gender, active, age,
+    friends, avatar, groups, chats,
+    created_at as createdAt, updated_at as updatedAt
+    from t_user
+    where username like concat('%', #{username},'%')
+  </select>
+
+  <select id="findUserById" parameterType="long" resultType="user">
+    select id, username, phonenumber, gender, active, age,
+    friends, avatar, groups, chats,
+    created_at as createdAt, updated_at as updatedAt
+    from t_user where id = #{id}
+  </select>
+
+  <select id="findUsersByIds" resultType="user">
+    select id, username, phonenumber, gender, active, age,
+    friends, avatar, groups, chats,
+    created_at as createdAt, updated_at as updatedAt
+    from t_user where id in ( ${ids} )
+  </select>
+
+  <select id="findInvitationByReceiverId" resultType="invitation">
+    select 
+      id,
+      sender_id as senderId, 
+      receiver_id as receiverId, 
+      group_id as groupId, 
+      sender_name as senderName, 
+      group_name as groupName, 
+      invitation_type as invitationType, 
+      handled, agree
+    from t_invitation
+    where receiver_id = #{id}
+  </select>
+
+
+  <insert id="insertInvitation">
+    insert into t_invitation
+    ( sender_id, receiver_id, group_id, sender_name, group_name, 
+    invitation_type, handled, agree )
+    values (
+      #{invitation.senderId}, #{invitation.receiverId},
+      #{invitation.groupId}, #{invitation.senderName},
+      #{invitation.groupName}, #{invitation.invitationType}, 
+      #{invitation.handled}, #{invitation.agree}
+    )
+  </insert>
+
+  <update id="updateInvitation">
+    update t_invitation 
+    set
+      handled = #{invitation.handled}, 
+      agree = #{invitation.agree}
+    where id= #{invitation.id}
+ 
+  </update>
+
+  <update id="updateUserFriendList">
+      update t_user set 
+      friends = #{user.friends},
+      chats = #{user.chats}
+      where id = #{user.id}
+  </update >
+
+  <update id="updateUserGroupList">
+      update t_user set groups = #{user.groups} where id = #{user.id}
+  </update>
+
+  <insert id="insertFriendShip">
+    insert into t_friendship 
+    ( user_a, user_b )
+    values (
+      #{userId}, #{friendId}
+    )
+  </insert>
+
+  <delete id="removeFriendShip">
+    delete from t_friendship 
+    where 
+      ( user_a = #{userId} and user_b = #{friendId} ) or
+      ( user_b = #{userId} and user_a = #{friendId} )
+  </delete>
+
+</mapper>

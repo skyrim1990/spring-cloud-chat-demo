@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tao.coreservice.repository.GroupRepository">
+  <select id="findGroupsByOwnerId" resultType="chatgroup">
+    select
+      id, owner_id as ownerId,
+      owner_name as ownerName,
+      group_name as groupName,
+      updated_at as updatedAt,
+      last_message as lastMessage,
+      members 
+    from
+      t_group where owner_id = #{id}
+  </select>
+
+  <select id="findGroupsByGroupIds" resultType="chatgroup">
+   select 
+      id, owner_id as ownerId,
+      owner_name as ownerName,
+      group_name as groupName,
+      updated_at as updatedAt,
+      last_message as lastMessage, 
+      members 
+    from 
+      t_group where id in ( ${ids} )
+  </select>
+
+  <select id="findGroupById" resultType="chatgroup">
+    select 
+      id, owner_id as ownerId,
+      owner_name as ownerName,
+      group_name as groupName,
+      updated_at as updatedAt,
+      last_message as lastMessage, 
+      members 
+    from 
+      t_group where id = #{id}
+  </select>
+
+  <insert id="addGroup" useGeneratedKeys="true" keyProperty="id" parameterType="chatgroup">
+    insert into t_group 
+    ( owner_id, owner_name, group_name, members, last_message )
+    values(
+      #{ownerId}, #{ownerName}, #{groupName}, #{members}, #{lastMessage}
+    )
+  </insert>
+
+  <update id="updateGroupFriends">
+    update t_user set members = #{ids}
+  </update>
+
+  <delete id="removeGroup">
+    delete from t_group where id = #{id}
+  </delete>
+
+
+  <insert id="addRelationShip">
+    insert into t_user_group
+    ( user_id, group_id )
+    values (
+      #{uId}, #{gId}
+    )
+  </insert>
+
+  <delete id="removeRelationShip">
+    delete from t_user_group 
+    where 
+      ( user_id = #{fId} and group_id = #{gId} )
+  </delete>
+
+</mapper>

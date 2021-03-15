@@ -1,0 +1,65 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-point
+
+  cloud:
+    gateway:
+      routes:
+
+      - predicates:
+        - Path=/ws/**
+        filters:
+          - StripPrefix=1
+        uri: http://message-service:8080
+
+      - predicates:
+        - Path=/api/**
+        filters:
+          - StripPrefix=1
+        uri: http://authenticate-service:8080
+
+      - predicates:
+        - Path=/core-api/**
+        filters:
+          - StripPrefix=1
+        uri: http://core-service:8080
+
+      - predicates:
+        - Path=/resource-api/**
+        filters:
+          - StripPrefix=1
+        uri: http://resource-service:8080
+
+      - predicates:
+        - Path=/auth/**
+        filters:
+          - StripPrefix=1
+        uri: http://authenticate-service:8080
+
+      - predicates:
+        - Path=/message-api/**
+        filters:
+          - StripPrefix=1
+        uri: http://message-service:8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${DEFAULT_ZONE}
+
+  instance:
+    hostname: ${HOSTNAME:localhost}
+    preferIpAddress: false
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    status-page-url: http://${spring.cloud.ipAddress}:${server.port}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tao.resourceservice.repository.ResourceRepository">
+
+    <select id="findResources" resultType="resource">
+      select 
+      id, serialname, 
+      name, note,
+      created_at as createdAt, updated_at as updatedAt
+      from t_resource; 
+    </select>
+
+    <insert id="insertResource" parameterType="resource">
+      insert into t_resource (
+        serialname, name, note
+      ) values (
+        #{serialname}, #{name}, #{note}
+      )
+    </insert>
+
+</mapper>

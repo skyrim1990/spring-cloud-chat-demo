@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tao.messageservice.repository.AccountRepository">
+
+  <select id="findUserById" parameterType="long" resultType="user">
+    select id, username, phonenumber, gender, active, age,
+    friends, avatar, groups, chats,
+    created_at as createdAt, updated_at as updatedAt
+    from t_user where id = #{id}
+  </select>
+
+  <select id="findUsersByIds" resultType="user">
+    select id, username, phonenumber, gender, active, age,
+    friends, avatar, groups, chats,
+    created_at as createdAt, updated_at as updatedAt
+    from t_user where id in ( ${ids} )
+  </select>
+
+  <select id="findChatGroupById" resultType="chatgroup">
+    select
+      id, owner_id as ownerId,
+      owner_name as ownerName,
+      group_name as groupName,
+      updated_at as updatedAt,
+      last_message as lastMessage,
+      members 
+    from
+      t_group where id = #{id}
+  </select>
+
+</mapper>

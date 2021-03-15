@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tao.coreservice.repository.ChatRepository">
+
+  <select id="findChatsByIds" resultType="chat">
+    select id, last_message as lastMessage, members, 
+    updated_at as updatedAt
+    from t_chat where id in ( ${ids} )
+  </select>
+
+  <select id="findChatByMembers" resultType="chat">
+    select id, last_message as lastMessage, members, 
+    updated_at as updatedAt
+    from t_chat where 
+      members = #{member_a} or  members = #{member_b}
+  </select>
+
+  <insert id="addChat" useGeneratedKeys="true" keyProperty="id">
+    insert into t_chat
+    ( last_message, members )
+    values (
+      #{lastMessage}, #{members}
+    )
+  </insert>
+
+  <update id="updateChat">
+    update t_chat
+    set
+      last_message = #{lastMessage}
+    where id= #{id}
+  </update>
+
+  <delete id="removeChat">
+    delete from t_chat
+    where 
+      id = #{id}
+  </delete>
+
+</mapper>

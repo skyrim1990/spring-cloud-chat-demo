@@ -1,0 +1,27 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: admin-server-node
+  security:
+    user:
+      name: admin
+      password: 123456
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    register-with-eureka: true # 是否向注册中心注册自己
+    fetch-registry: true # 是否检索服务
+    service-url:
+      defaultZone: http://admin:123456@localhost:8100/eureka/,http://admin:123456@localhost:8101/eureka/,http://admin:123456@localhost:8102/eureka/
+  instance:
+    hostname: localhost
+    preferIpAddress: false # 并不使用IP进行注册
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
