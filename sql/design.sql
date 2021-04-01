@@ -97,3 +97,12 @@ CREATE TABLE t_message(
     content text not null,
     is_read char(1) default '0' # 0未读 1已读
 ) NGEINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE t_chat (
+	id bigint not null primary key auto_increment,
+    members text, # 当前讨论组内用户id的集合使用,分隔
+    last_message char(255),
+	updated_at timestamp default current_timestamp on update current_timestamp
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
