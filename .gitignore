@@ -1,0 +1,4 @@
+authenticate-service/logs/
+core-service/logs/
+mysql/
+resource-service/logs/

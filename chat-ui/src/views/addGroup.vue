@@ -85,6 +85,7 @@ export default {
           this.friends = resp.data.map((o) =>{
             o.name = o.username
             o.selected = false
+            o.avatar = "/resource-api/static/" + o.avatar
             return o 
           })
         } else {
